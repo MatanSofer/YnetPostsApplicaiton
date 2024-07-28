@@ -20,15 +20,4 @@ class OpenScreenViewModel @Inject constructor(
 
     fun getTimeInfoFlow() = timeManager.time
 
-
-    fun onAction(action: OpenScreenUiAction){
-        when(action){
-            OpenScreenUiAction.NavigateToListsScreen-> {
-                //navController.navigate()
-            }
-        }
-    }
-
-
-
 }

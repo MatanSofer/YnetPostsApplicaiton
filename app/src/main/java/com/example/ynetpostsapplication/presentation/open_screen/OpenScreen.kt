@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.ynetpostsapplication.R
 import com.example.ynetpostsapplication.presentation.lists_screen.ListScreenViewModel
 import com.example.ynetpostsapplication.presentation.navigation.Screen
@@ -38,6 +39,7 @@ import java.util.Locale
 
 @Composable
 fun OpenScreen(
+    navController: NavController,
     viewModel: OpenScreenViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -73,7 +75,7 @@ fun OpenScreen(
         }
 
         Button(
-            onClick = { viewModel.onAction(OpenScreenUiAction.NavigateToListsScreen) },
+            onClick = { navController.navigate(Screen.ListsScreen.route) },
             shape = MaterialTheme.shapes.large,
             modifier = Modifier
                 .align(Alignment.BottomCenter)

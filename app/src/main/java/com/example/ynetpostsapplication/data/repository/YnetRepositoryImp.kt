@@ -1,14 +1,18 @@
 package com.example.ynetpostsapplication.data.repository
 
+import android.util.Log
 import com.example.ynetpostsapplication.data.remote.CarsApi
 import com.example.ynetpostsapplication.data.remote.CultureApi
 import com.example.ynetpostsapplication.data.remote.SportApi
+import com.example.ynetpostsapplication.data.remote.mappers.toCar
+import com.example.ynetpostsapplication.data.remote.mappers.toSport
 import com.example.ynetpostsapplication.domain.YnetRepository
 import com.example.ynetpostsapplication.domain.models.Car
 import com.example.ynetpostsapplication.domain.models.Culture
 import com.example.ynetpostsapplication.domain.models.Sport
 import okhttp3.ResponseBody
 import retrofit2.Response
+import toCulture
 
 class YnetRepositoryImp (
     private val carsApi: CarsApi,
@@ -16,23 +20,18 @@ class YnetRepositoryImp (
     private val sportApi: SportApi
 ): YnetRepository{
 
-    //    override suspend fun getPostsFromApi(): List<Post> {
-//        return api.getCarsFeed().map {posts ->
-//            posts.toPost()
-//        }
-//    }
     override suspend fun getCarFromApi(): List<Car> {
         val response = carsApi.getCarsFeed()
-        return emptyList()
+        return response.channel?.items?.map { it.toCar() } ?: emptyList()
     }
 
     override suspend fun getCultureFromApi(): List<Culture> {
         val response = cultureApi.getCultureFeed()
-        return emptyList()
+        return response.channel?.items?.map { it.toCulture() } ?: emptyList()
     }
 
     override suspend fun getSportFromApi(): List<Sport> {
         val response = sportApi.getSportFeed()
-        return emptyList()
+        return response.channel?.items?.map { it.toSport() } ?: emptyList()
     }
 }

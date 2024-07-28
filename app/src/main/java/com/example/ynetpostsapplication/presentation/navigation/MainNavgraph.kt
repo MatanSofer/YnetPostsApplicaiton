@@ -20,7 +20,7 @@ fun MainNavgraph(
         composable(
             route = Screen.OpenScreen.route
         ){
-            OpenScreen()
+            OpenScreen(navController)
         }
         composable(
             route = Screen.ListsScreen.route

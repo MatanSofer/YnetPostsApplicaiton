@@ -1,5 +1,6 @@
 package com.example.ynetpostsapplication.presentation.lists_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ynetpostsapplication.domain.cars.GetCarsUseCase
@@ -28,9 +29,6 @@ class ListScreenViewModel  @Inject constructor(
 
     private val _state = MutableStateFlow(ListScreenState())
     val state: StateFlow<ListScreenState> = _state
-    private var sportListJob: Job? = null
-    private var cultureListJob: Job? = null
-
 
     init {
         getCarsList()
@@ -51,7 +49,7 @@ class ListScreenViewModel  @Inject constructor(
                         // we can add later error handle
                     }
                     is Resource.Loading -> {
-                        _state.value = _state.value.copy(firstTabIsLoading = true)
+                        //_state.value = _state.value.copy(firstTabIsLoading = true)
                     }
                 }
             }
@@ -66,14 +64,12 @@ class ListScreenViewModel  @Inject constructor(
                             sports = result.data ?: emptyList(),
                             secondTabIsLoading = false
                         )
-                        startPollingSportList()
+                        //startPollingSportList()
                     }
                     is Resource.Error -> {
                         _state.value = _state.value.copy(
                             secondTabIsLoading = false
                         )
-                        delay(POLLING_INTERVAL)
-                        startPollingSportList()
                     }
                     is Resource.Loading -> {
                         _state.value = _state.value.copy(secondTabIsLoading = true)
@@ -91,12 +87,13 @@ class ListScreenViewModel  @Inject constructor(
                         _state.value = _state.value.copy(
                             culture = result.data ?: emptyList()
                         )
-                        startPollingCultureList()
+                        //startPollingCultureList()
+
                     }
                     is Resource.Error -> {
                         // we can add later error handle
-                        delay(POLLING_INTERVAL)
-                        startPollingCultureList()
+//                        delay(POLLING_INTERVAL)
+//                        startPollingCultureList()
                     }
                     is Resource.Loading -> {
                         _state.value = _state.value.copy(secondTabIsLoading = true)
@@ -106,8 +103,7 @@ class ListScreenViewModel  @Inject constructor(
         }
     }
     private fun startPollingSportList() {
-        sportListJob?.cancel()
-        sportListJob = viewModelScope.launch {
+         viewModelScope.launch {
             while (true) {
                 getSportsList()
                 delay(POLLING_INTERVAL)
@@ -115,8 +111,7 @@ class ListScreenViewModel  @Inject constructor(
         }
     }
     private fun startPollingCultureList() {
-        cultureListJob?.cancel()
-        cultureListJob = viewModelScope.launch {
+        viewModelScope.launch {
             while (true) {
                 getCultureList()
                 delay(POLLING_INTERVAL)

@@ -1,8 +1,14 @@
-import com.example.ynetpostsapplication.data.remote.model.CultureDto
+import com.example.ynetpostsapplication.data.remote.DtoDateFormatter.formatDateString
+import com.example.ynetpostsapplication.data.remote.model.CultureItemDto
 import com.example.ynetpostsapplication.domain.models.Culture
 
-fun CultureDto.toCulture(): Culture {
+fun CultureItemDto.toCulture(): Culture {
     return Culture(
-        title = ""
+        title = this.title,
+        description = this.description,
+        link = this.link,
+        pubDate = formatDateString(this.pubDate),
+        guid = this.guid,
+        tags = this.tags
     )
 }

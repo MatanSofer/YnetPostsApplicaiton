@@ -1,9 +1,12 @@
 package com.example.ynetpostsapplication.presentation.lists_screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -19,18 +22,22 @@ fun ListsScreen(
     val state  = viewModel.state.collectAsState().value
     Box(modifier = Modifier.fillMaxSize()){
         LazyColumn(modifier = Modifier.fillMaxSize() ){
-            items(state.cars.size){
-                    car ->
-                ListItem(
-                    title = "car title",
-//                    onItemClick ={viewModel.onAction(ListScreenUiAction.NavigateBackWithTitle(car.title))}
-                    onItemClick = {}
-                )
+            items(state.cars){car ->
+                if (car.title != null && car.pubDate != null) {
+                    Column {
+                        ListItem(
+                            title = car.title,
+                            date = car.pubDate,
+                            onItemClick = {}
+                        )
+                        Divider()
+                    }
+                }
             }
         }
-        if(state.secondTabIsLoading){
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        }
+//        if(state.secondTabIsLoading){
+//            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+//        }
     }
 }
 @Preview

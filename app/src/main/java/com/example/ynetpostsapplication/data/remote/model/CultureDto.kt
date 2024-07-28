@@ -1,30 +1,47 @@
 package com.example.ynetpostsapplication.data.remote.model
 
-import java.util.Date
+import org.simpleframework.xml.Element
+import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.Root
 
-data class CultureImage(
-    val title: String,
-    val link: String,
-    val url: String
-)
-
-data class CultureItem(
-    val title: String,
-    val description: String,
-    val link: String,
-    val pubDate: Date,
-    val guid: String,
-    val tags: List<String>
-)
-
+@Root(name = "rss", strict = false)
 data class CultureDto(
-    val title: String,
-    val link: String,
-    val description: String,
-    val copyright: String,
-    val language: String,
-    val pubDate: Date,
-    val image: CultureImage,
-    val lastBuildDate: Date,
-    val items: List<CultureItem>
+    @field:Element(name = "channel")
+    var channel: CultureDtoChannel? = null
+)
+
+@Root(name = "channel", strict = false)
+data class CultureDtoChannel(
+    @field:Element(name = "title")
+    var title: String? = null,
+
+    @field:Element(name = "link")
+    var link: String? = null,
+
+    @field:Element(name = "description")
+    var description: String? = null,
+
+    @field:ElementList(inline = true, name = "item")
+    var items: List<CultureItemDto>? = null
+)
+
+@Root(name = "item", strict = false)
+data class CultureItemDto(
+    @field:Element(name = "title", required = false)
+    var title: String? = null,
+
+    @field:Element(name = "description", required = false)
+    var description: String? = null,
+
+    @field:Element(name = "link", required = false)
+    var link: String? = null,
+
+    @field:Element(name = "pubDate", required = false)
+    var pubDate: String? = null,
+
+    @field:Element(name = "guid", required = false)
+    var guid: String? = null,
+
+    @field:Element(name = "tags", required = false)
+    var tags: String? = null
 )
