@@ -42,14 +42,15 @@ class ListScreenViewModel  @Inject constructor(
                 when(result){
                     is Resource.Success -> {
                         _state.value = _state.value.copy(
-                            cars = result.data ?: emptyList()
+                            cars = result.data ?: emptyList(),
+                            firstTabIsLoading = false
                         )
                     }
                     is Resource.Error -> {
                         // we can add later error handle
                     }
                     is Resource.Loading -> {
-                        //_state.value = _state.value.copy(firstTabIsLoading = true)
+                        _state.value = _state.value.copy(firstTabIsLoading = true)
                     }
                 }
             }
