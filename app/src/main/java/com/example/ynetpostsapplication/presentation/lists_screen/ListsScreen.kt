@@ -1,5 +1,6 @@
 package com.example.ynetpostsapplication.presentation.lists_screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,19 +29,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.ynetpostsapplication.R
 import com.example.ynetpostsapplication.domain.models.Car
 import com.example.ynetpostsapplication.domain.models.Culture
 import com.example.ynetpostsapplication.domain.models.Sport
 import com.example.ynetpostsapplication.presentation.lists_screen.composable.ListItem
+import com.example.ynetpostsapplication.presentation.lists_screen.composable.Loading
 
 @Composable
 fun ListsScreen(
+    navController: NavController,
     viewModel: ListScreenViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
+
     var selectedTabIndex by remember { mutableStateOf(0) }
+    var lastClickedItemTitle by remember { mutableStateOf("") }
+
     val tabs = listOf(stringResource(R.string.cars_tab_text), stringResource(R.string.sport_culture_tab_text))
+    BackHandler {
+        navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set("clicked_title",lastClickedItemTitle )
+        navController.popBackStack()
+    }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(1f)) {
@@ -55,18 +68,22 @@ fun ListsScreen(
                         else -> emptyList()
                     }
                     items(itemsToDisplay) { item ->
-                        val (title, pubDate) = when (item) {
-                            is Car -> item.title to item.pubDate
-                            is Sport -> item.title to item.pubDate
-                            is Culture -> item.title to item.pubDate
-                            else -> null to null
+                        val (title, pubDate, link) = when (item) {
+                            //currently we have only 3 critical params, if we add more then it should be converted to UiDataclass
+                            is Car -> Triple(item.title, item.pubDate, item.link)
+                            is Sport -> Triple(item.title, item.pubDate, item.link)
+                            is Culture -> Triple(item.title, item.pubDate, item.link)
+                            else -> Triple(null, null, null)
                         }
-                        if (title != null && pubDate != null) {
+                        if (title != null && pubDate != null && link != null) {
                             Column {
                                 ListItem(
                                     title = title,
                                     date = pubDate,
-                                    onItemClick = {}
+                                    onItemClick = {
+                                        viewModel.onAction(ListScreenUiAction.OpenWebView(link))
+                                        lastClickedItemTitle = title
+                                    }
                                 )
                                 Divider()
                             }
@@ -90,23 +107,11 @@ fun ListsScreen(
         }
     }
 }
-@Composable
-fun Loading() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(56.dp),
-        )
-    }
-}
 
-@Preview
-@Composable
-private fun ListsScreenPreview() {
-    ListsScreen(
-
-    )
-}
+//@Preview
+//@Composable
+//private fun ListsScreenPreview() {
+//    ListsScreen(
+//
+//    )
+//}

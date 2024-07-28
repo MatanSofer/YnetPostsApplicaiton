@@ -49,4 +49,5 @@ object AppModule {
     fun provideYnetRepository(carsApi: CarsApi, cultureApi: CultureApi, sportApi: SportApi): YnetRepository{
         return YnetRepositoryImp(carsApi,cultureApi,sportApi)
     }
+
 }

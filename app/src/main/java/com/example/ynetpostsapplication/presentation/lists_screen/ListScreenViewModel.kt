@@ -1,6 +1,10 @@
 package com.example.ynetpostsapplication.presentation.lists_screen
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ynetpostsapplication.domain.cars.GetCarsUseCase
@@ -10,6 +14,7 @@ import com.example.ynetpostsapplication.presentation.lists_screen.model.ListScre
 import com.example.ynetpostsapplication.utils.Constants.POLLING_INTERVAL
 import com.example.ynetpostsapplication.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -24,7 +29,8 @@ import javax.inject.Inject
 class ListScreenViewModel  @Inject constructor(
     private val getCarsUseCase: GetCarsUseCase,
     private val getCultureUseCase: GetCultureUseCase,
-    private val getSportUseCase: GetSportUseCase
+    private val getSportUseCase: GetSportUseCase,
+    @ApplicationContext private val context: Context
 ): ViewModel() {
 
     private val _state = MutableStateFlow(ListScreenState())
@@ -125,7 +131,10 @@ class ListScreenViewModel  @Inject constructor(
                 //navController.navigateUp()
             }
             is ListScreenUiAction.OpenWebView -> {
-
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(action.link)).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
             }
         }
     }

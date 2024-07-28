@@ -40,6 +40,7 @@ import java.util.Locale
 @Composable
 fun OpenScreen(
     navController: NavController,
+    lable: String? = null,
     viewModel: OpenScreenViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -64,12 +65,20 @@ fun OpenScreen(
                 text = timeState,
                 fontSize = 24.sp
             )
+            lable?.let {
+                Text(
+                    text = stringResource(R.string.last_opened_article),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
+                )
+            }
             Text(
-                text = if(!state.lable.isNullOrEmpty()) state.lable else "There is not available title",
+                text = if(!lable.isNullOrEmpty()) lable else stringResource(R.string.last_opened_article),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                color = if(!state.lable.isNullOrEmpty()) Color.Black else Color.Red,
+                color = if(!lable.isNullOrEmpty()) Color.DarkGray else Color.Red,
                 modifier = Modifier.fillMaxWidth()
             )
         }

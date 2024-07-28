@@ -19,13 +19,14 @@ fun MainNavgraph(
     ) {
         composable(
             route = Screen.OpenScreen.route
-        ){
-            OpenScreen(navController)
+        ){ entry ->
+            val lastClickedTitle = entry.savedStateHandle.get<String>("clicked_title")
+            OpenScreen(navController,lastClickedTitle)
         }
         composable(
             route = Screen.ListsScreen.route
         ){
-            ListsScreen()
+            ListsScreen(navController)
         }
     }
 }

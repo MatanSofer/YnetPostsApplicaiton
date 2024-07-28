@@ -3,4 +3,7 @@
     <string name="navigate_to_articles">Navigate To Ynet Articles</string>
     <string name="cars_tab_text">Cars</string>
     <string name="sport_culture_tab_text">Sports &amp; Culture</string>
+    <string name="last_opened_article">The last article you opened:</string>
+    <string name="no_valid_article">"There is not available title"</string>
+
 </resources>
