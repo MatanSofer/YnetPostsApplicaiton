@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">YnetPostsApplication</string>
+    <string name="navigate_to_articles">Navigate To Ynet Articles"</string>
+</resources>
