@@ -1,6 +1,6 @@
-package com.example.ynetpostsapplication.data.remote
+package com.example.ynetpostsapplication.data.remote.mappers
 
-object DtoDateFormatter {
+object DtoFormatter {
     fun formatDateString(dateStr: String?): String? {
         if (dateStr == null) return null
         return try {

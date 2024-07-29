@@ -1,7 +1,6 @@
 package com.example.ynetpostsapplication.domain.sport
 
 import com.example.ynetpostsapplication.domain.YnetRepository
-import com.example.ynetpostsapplication.domain.models.Culture
 import com.example.ynetpostsapplication.domain.models.Sport
 import com.example.ynetpostsapplication.utils.Resource
 import kotlinx.coroutines.flow.Flow

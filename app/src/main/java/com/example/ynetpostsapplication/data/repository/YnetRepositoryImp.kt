@@ -1,6 +1,5 @@
 package com.example.ynetpostsapplication.data.repository
 
-import android.util.Log
 import com.example.ynetpostsapplication.data.remote.CarsApi
 import com.example.ynetpostsapplication.data.remote.CultureApi
 import com.example.ynetpostsapplication.data.remote.SportApi
@@ -10,8 +9,6 @@ import com.example.ynetpostsapplication.domain.YnetRepository
 import com.example.ynetpostsapplication.domain.models.Car
 import com.example.ynetpostsapplication.domain.models.Culture
 import com.example.ynetpostsapplication.domain.models.Sport
-import okhttp3.ResponseBody
-import retrofit2.Response
 import toCulture
 
 class YnetRepositoryImp (

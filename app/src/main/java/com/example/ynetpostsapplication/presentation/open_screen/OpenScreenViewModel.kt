@@ -2,7 +2,6 @@ package com.example.ynetpostsapplication.presentation.open_screen.model
 
 
 import androidx.lifecycle.ViewModel
-import com.example.ynetpostsapplication.presentation.open_screen.OpenScreenUiAction
 import com.example.ynetpostsapplication.utils.TimeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

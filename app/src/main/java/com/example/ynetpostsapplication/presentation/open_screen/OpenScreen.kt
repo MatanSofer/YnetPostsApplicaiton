@@ -1,46 +1,41 @@
 package com.example.ynetpostsapplication.presentation.open_screen
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.ynetpostsapplication.R
-import com.example.ynetpostsapplication.presentation.lists_screen.ListScreenViewModel
 import com.example.ynetpostsapplication.presentation.navigation.Screen
 import com.example.ynetpostsapplication.presentation.open_screen.model.OpenScreenViewModel
-import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 
 @Composable
 fun OpenScreen(
     navController: NavController,
-    lable: String? = null,
+    label: String? = null,
     viewModel: OpenScreenViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -56,6 +51,13 @@ fun OpenScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(
+                modifier = Modifier
+                    .height(96.dp)
+                    .width(96.dp),
+                painter = painterResource(R.drawable.ic_app_logo),
+                contentDescription = null
+            )
             Text(
                 text = state.name,
                 fontWeight = FontWeight.Bold,
@@ -65,7 +67,7 @@ fun OpenScreen(
                 text = timeState,
                 fontSize = 24.sp
             )
-            lable?.let {
+            if(!label.isNullOrEmpty()){
                 Text(
                     text = stringResource(R.string.last_opened_article),
                     fontSize = 22.sp,
@@ -74,11 +76,11 @@ fun OpenScreen(
                 )
             }
             Text(
-                text = if(!lable.isNullOrEmpty()) lable else stringResource(R.string.last_opened_article),
+                text = if(!label.isNullOrEmpty()) label else stringResource(R.string.no_valid_article),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                color = if(!lable.isNullOrEmpty()) Color.DarkGray else Color.Red,
+                color = if(!label.isNullOrEmpty()) Color.DarkGray else Color.Red,
                 modifier = Modifier.fillMaxWidth()
             )
         }

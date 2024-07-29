@@ -1,15 +1,12 @@
 package com.example.ynetpostsapplication.presentation.lists_screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -21,13 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.ynetpostsapplication.R
@@ -36,6 +30,7 @@ import com.example.ynetpostsapplication.domain.models.Culture
 import com.example.ynetpostsapplication.domain.models.Sport
 import com.example.ynetpostsapplication.presentation.lists_screen.composable.ListItem
 import com.example.ynetpostsapplication.presentation.lists_screen.composable.Loading
+import com.example.ynetpostsapplication.presentation.lists_screen.composable.FillScreenWithMessage
 
 @Composable
 fun ListsScreen(
@@ -48,19 +43,29 @@ fun ListsScreen(
     var lastClickedItemTitle by remember { mutableStateOf("") }
 
     val tabs = listOf(stringResource(R.string.cars_tab_text), stringResource(R.string.sport_culture_tab_text))
+
     BackHandler {
-        navController.previousBackStackEntry
-            ?.savedStateHandle
-            ?.set("clicked_title",lastClickedItemTitle )
+        if (lastClickedItemTitle.isNotBlank()) {
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("clicked_title", lastClickedItemTitle)
+        }
         navController.popBackStack()
     }
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(1f)) {
 
-                if(selectedTabIndex == 0 && state.firstTabIsLoading)
+                if ((selectedTabIndex == 0 && state.carsItemsAreLoading) || (selectedTabIndex == 1 && state.sportItemsAreLoading) || (selectedTabIndex == 1 && state.cultureItemsAreLoading)) {
                     Loading()
-
+                }
+                if(selectedTabIndex == 0 && state.cars.isEmpty()){
+                    FillScreenWithMessage(stringResource(R.string.no_cars_received))
+                }
+                if(selectedTabIndex == 1 && state.culture.isEmpty() && state.sports.isEmpty()){
+                    FillScreenWithMessage(stringResource(R.string.no_culture_sport_received))
+                }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     val itemsToDisplay = when (selectedTabIndex) {
                         0 -> state.cars
@@ -108,10 +113,3 @@ fun ListsScreen(
     }
 }
 
-//@Preview
-//@Composable
-//private fun ListsScreenPreview() {
-//    ListsScreen(
-//
-//    )
-//}

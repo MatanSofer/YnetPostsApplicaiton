@@ -3,8 +3,6 @@ package com.example.ynetpostsapplication.presentation.lists_screen
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ynetpostsapplication.domain.cars.GetCarsUseCase
@@ -15,23 +13,20 @@ import com.example.ynetpostsapplication.utils.Constants.POLLING_INTERVAL
 import com.example.ynetpostsapplication.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
-class ListScreenViewModel  @Inject constructor(
+class ListScreenViewModel @Inject constructor(
     private val getCarsUseCase: GetCarsUseCase,
     private val getCultureUseCase: GetCultureUseCase,
     private val getSportUseCase: GetSportUseCase,
     @ApplicationContext private val context: Context
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ListScreenState())
     val state: StateFlow<ListScreenState> = _state
@@ -42,94 +37,94 @@ class ListScreenViewModel  @Inject constructor(
         getCultureList()
     }
 
-    private fun getCarsList(){
-        viewModelScope.launch(Dispatchers.IO) {
-            getCarsUseCase().collect{ result ->
-                when(result){
-                    is Resource.Success -> {
-                        _state.value = _state.value.copy(
-                            cars = result.data ?: emptyList(),
-                            firstTabIsLoading = false
-                        )
-                    }
-                    is Resource.Error -> {
-                        // we can add later error handle
-                    }
-                    is Resource.Loading -> {
-                        _state.value = _state.value.copy(firstTabIsLoading = true)
-                    }
-                }
-            }
-        }
-    }
-    private fun getSportsList(){
-        viewModelScope.launch(Dispatchers.IO) {
-            getSportUseCase().collect{ result ->
-                when(result){
-                    is Resource.Success -> {
-                        _state.value = _state.value.copy(
-                            sports = result.data ?: emptyList(),
-                            secondTabIsLoading = false
-                        )
-                        //startPollingSportList()
-                    }
-                    is Resource.Error -> {
-                        _state.value = _state.value.copy(
-                            secondTabIsLoading = false
-                        )
-                    }
-                    is Resource.Loading -> {
-                        _state.value = _state.value.copy(secondTabIsLoading = true)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getCultureList(){
-        viewModelScope.launch(Dispatchers.IO) {
-            getCultureUseCase().collect{ result ->
-                when(result){
-                    is Resource.Success -> {
-                        _state.value = _state.value.copy(
-                            culture = result.data ?: emptyList()
-                        )
-                        //startPollingCultureList()
-
-                    }
-                    is Resource.Error -> {
-                        // we can add later error handle
-//                        delay(POLLING_INTERVAL)
-//                        startPollingCultureList()
-                    }
-                    is Resource.Loading -> {
-                        _state.value = _state.value.copy(secondTabIsLoading = true)
-                    }
-                }
-            }
-        }
-    }
-    private fun startPollingSportList() {
-         viewModelScope.launch {
-            while (true) {
-                getSportsList()
-                delay(POLLING_INTERVAL)
-            }
-        }
-    }
-    private fun startPollingCultureList() {
+    private fun getCarsList() {
         viewModelScope.launch {
             while (true) {
-                getCultureList()
-                delay(POLLING_INTERVAL)
+                getCarsUseCase().collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _state.value = _state.value.copy(
+                                cars = result.data ?: emptyList(),
+                                carsItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Error -> {
+                            _state.value = _state.value.copy(
+                                carsItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Loading -> {
+                            _state.value = _state.value.copy(carsItemsAreLoading = true)
+                        }
+                    }
+                }
             }
         }
     }
-    fun onAction(action: ListScreenUiAction){
-        when(action){
-            is ListScreenUiAction.NavigateBackWithTitle-> {
-                //navController.navigateUp()
+    private fun getSportsList() {
+        viewModelScope.launch {
+            while (true) {
+                getSportUseCase().collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _state.value = _state.value.copy(
+                                sports = result.data ?: emptyList(),
+                                sportItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Error -> {
+                            _state.value = _state.value.copy(
+                                sportItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Loading -> {
+                            _state.value = _state.value.copy(sportItemsAreLoading = true)
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private fun getCultureList() {
+        viewModelScope.launch {
+            while (true) {
+                getCultureUseCase().collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _state.value = _state.value.copy(
+                                culture = result.data ?: emptyList(),
+                                cultureItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Error -> {
+                            _state.value = _state.value.copy(
+                                cultureItemsAreLoading = false
+                            )
+                            delay(POLLING_INTERVAL)
+                        }
+
+                        is Resource.Loading -> {
+                            _state.value = _state.value.copy(cultureItemsAreLoading = true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun onAction(action: ListScreenUiAction) {
+        when (action) {
             is ListScreenUiAction.OpenWebView -> {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(action.link)).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -138,5 +133,4 @@ class ListScreenViewModel  @Inject constructor(
             }
         }
     }
-
 }

@@ -1,6 +1,6 @@
 package com.example.ynetpostsapplication.data.remote.mappers
 
-import com.example.ynetpostsapplication.data.remote.DtoDateFormatter.formatDateString
+import com.example.ynetpostsapplication.data.remote.mappers.DtoFormatter.formatDateString
 import com.example.ynetpostsapplication.data.remote.model.SportItemDto
 import com.example.ynetpostsapplication.domain.models.Sport
 

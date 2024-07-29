@@ -1,4 +1,4 @@
-import com.example.ynetpostsapplication.data.remote.DtoDateFormatter.formatDateString
+import com.example.ynetpostsapplication.data.remote.mappers.DtoFormatter.formatDateString
 import com.example.ynetpostsapplication.data.remote.model.CultureItemDto
 import com.example.ynetpostsapplication.domain.models.Culture
 

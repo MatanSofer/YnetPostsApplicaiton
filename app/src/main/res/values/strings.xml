@@ -4,6 +4,8 @@
     <string name="cars_tab_text">Cars</string>
     <string name="sport_culture_tab_text">Sports &amp; Culture</string>
     <string name="last_opened_article">The last article you opened:</string>
-    <string name="no_valid_article">"There is not available title"</string>
+    <string name="no_valid_article">"There is no available title"</string>
+    <string name="no_cars_received">No car items available</string>
+    <string name="no_culture_sport_received"><![CDATA[No culture & sport items available]]></string>
 
 </resources>

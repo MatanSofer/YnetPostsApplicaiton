@@ -48,7 +48,7 @@ class TimeManager @Inject constructor() {
 
     private fun getCurrentDateTime(): String {
         val now = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
         return now.format(formatter)
     }
 }
